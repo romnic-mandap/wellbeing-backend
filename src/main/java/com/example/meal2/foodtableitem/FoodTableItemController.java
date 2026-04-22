@@ -1,6 +1,7 @@
 package com.example.meal2.foodtableitem;
 
 import com.example.meal2.foodtableitem.dto.FoodTableDTO;
+import com.example.meal2.foodtableitem.dto.FoodTableItemCreationDTO;
 import com.example.meal2.foodtableitem.dto.FoodTableItemDTO;
 import com.example.meal2.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,10 @@ public class FoodTableItemController {
     @PostMapping(value="/food-table-items", produces={"application/json"})
     public ResponseEntity<FoodTableItemDTO> createFoodTableItem(
             @AuthenticationPrincipal User user,
-            @RequestBody Long foodItemId
+            @RequestBody FoodTableItemCreationDTO foodTableItemCreationDTO
     ){
         return new ResponseEntity<>(
-                foodTableItemService.createFoodTableItem(user, foodItemId),
+                foodTableItemService.createFoodTableItem(user, foodTableItemCreationDTO.foodItemId()),
                 HttpStatus.CREATED
         );
     }

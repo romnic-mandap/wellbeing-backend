@@ -60,6 +60,9 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/food-table-items/**")
                 .authenticated()
 
+                .requestMatchers("api/v1/food-items/**")
+                .authenticated()
+
                 .requestMatchers("api/v1/meals/**")
                 .authenticated()
 
