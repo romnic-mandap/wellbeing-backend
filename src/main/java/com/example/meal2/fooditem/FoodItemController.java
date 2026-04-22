@@ -21,7 +21,7 @@ public class FoodItemController {
         this.foodItemService = foodItemService;
     }
 
-    @GetMapping(value="/fooditems", produces={"application/json"})
+    @GetMapping(value="/food-items", produces={"application/json"})
     public ResponseEntity<List<FoodItemDTO>> getAllFoodItems(){
         return new ResponseEntity<>(
                 foodItemService.getAllFoodItems(),

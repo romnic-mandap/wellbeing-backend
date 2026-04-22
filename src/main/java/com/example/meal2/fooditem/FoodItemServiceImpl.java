@@ -1,10 +1,14 @@
 package com.example.meal2.fooditem;
 
+import com.example.meal2.exception.NotResourceOwnerException;
+import com.example.meal2.exception.ResourceNotFoundException;
 import com.example.meal2.fooditem.dto.FoodItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class FoodItemServiceImpl implements FoodItemService {
@@ -23,6 +27,16 @@ public class FoodItemServiceImpl implements FoodItemService {
                 .map(this::convertFoodItemToFoodItemDTO)
                 .toList();
     }
+
+    @Override
+    public FoodItemDTO getFoodItem(Long foodItemId) {
+        Optional<FoodItem> foodItem = foodItemRepository.findById(foodItemId);
+        if(foodItem.isPresent()){
+            return convertFoodItemToFoodItemDTO(foodItem.get());
+        }
+        throw new ResourceNotFoundException("foodItem Id not found: " + foodItemId);
+    }
+
 
     private FoodItemDTO convertFoodItemToFoodItemDTO(FoodItem foodItem){
         return new FoodItemDTO(
