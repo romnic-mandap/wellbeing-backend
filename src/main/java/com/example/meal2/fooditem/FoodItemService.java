@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface FoodItemService {
 
-    List<FoodItemDTO> getAllFoodItems();
+    List<FoodItemDTO> getAllFoodItems(Integer page, Integer size);
 
     FoodItemDTO getFoodItem(Long foodItemId);
 

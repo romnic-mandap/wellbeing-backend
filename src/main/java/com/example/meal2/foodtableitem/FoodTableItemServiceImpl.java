@@ -11,6 +11,9 @@ import com.example.meal2.foodtableitem.dto.FoodTableSummaryDTO;
 import com.example.meal2.mealitem.MealItem;
 import com.example.meal2.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,13 +21,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.example.meal2.constant.Constants.DEFAULT_FOOD_TABLE_SIZE;
+
 @Service
 public class FoodTableItemServiceImpl implements FoodTableItemService {
 
     private final FoodTableItemRepository foodTableItemRepository;
     private final FoodItemService foodItemService;
-
-    public static final int MAX_FOOD_TABLE_ITEMS = 32;
 
     @Autowired
     public FoodTableItemServiceImpl(FoodTableItemRepository foodTableItemRepository, FoodItemService foodItemService) {
@@ -33,9 +36,14 @@ public class FoodTableItemServiceImpl implements FoodTableItemService {
     }
 
     @Override
-    public FoodTableDTO getFoodTable(User user) {
+    public FoodTableDTO getFoodTable(User user, Integer page, Integer size) {
         FoodTableSummaryDTO summary = foodTableItemRepository.getFoodTableSummary(user.getId());
-        List<FoodTableItemDTO> foodTableItemDTOList = foodTableItemRepository.findAllByOrderByCreatedAtAsc()
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("createdAt").ascending()
+        );
+        List<FoodTableItemDTO> foodTableItemDTOList = foodTableItemRepository.findAll(pageable)
                 .stream()
                 .map(this::convertFoodTableItemToFoodTableItemDTO)
                 .toList();
@@ -54,8 +62,8 @@ public class FoodTableItemServiceImpl implements FoodTableItemService {
     @Override
     public FoodTableItemDTO createFoodTableItem(User user, Long foodItemId) {
         int foodTableItems = foodTableItemRepository.countUserFoodTableItems(user.getId());
-        if(foodTableItems >= MAX_FOOD_TABLE_ITEMS){
-            throw new ResourceLimitException(String.format("max %d foodtableitems reached", MAX_FOOD_TABLE_ITEMS));
+        if(foodTableItems >= DEFAULT_FOOD_TABLE_SIZE){
+            throw new ResourceLimitException(String.format("max %d foodtableitems reached", DEFAULT_FOOD_TABLE_SIZE));
         }
 
         FoodItemDTO foodItemDTO = foodItemService.getFoodItem(foodItemId);

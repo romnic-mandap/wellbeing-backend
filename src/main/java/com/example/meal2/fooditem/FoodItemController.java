@@ -6,9 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
+
+import static com.example.meal2.constant.Constants.DEFAULT_FOOD_ITEM_PAGE_SIZE;
+import static com.example.meal2.constant.Constants.DEFAULT_PAGE_NUMBER;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -22,9 +27,14 @@ public class FoodItemController {
     }
 
     @GetMapping(value="/food-items", produces={"application/json"})
-    public ResponseEntity<List<FoodItemDTO>> getAllFoodItems(){
+    public ResponseEntity<List<FoodItemDTO>> getAllFoodItems(
+            @RequestParam Optional<Integer> p,
+            @RequestParam Optional<Integer> s
+    ){
+        Integer page = p.orElse(DEFAULT_PAGE_NUMBER);
+        Integer size = s.orElse(DEFAULT_FOOD_ITEM_PAGE_SIZE);
         return new ResponseEntity<>(
-                foodItemService.getAllFoodItems(),
+                foodItemService.getAllFoodItems(page, size),
                 HttpStatus.OK
         );
     }

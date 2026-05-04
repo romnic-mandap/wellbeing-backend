@@ -6,7 +6,7 @@ import com.example.meal2.user.User;
 
 public interface FoodTableItemService {
 
-    FoodTableDTO getFoodTable(User user);
+    FoodTableDTO getFoodTable(User user, Integer page, Integer size);
 
     FoodTableItemDTO createFoodTableItem(User user, Long foodItemId);
 

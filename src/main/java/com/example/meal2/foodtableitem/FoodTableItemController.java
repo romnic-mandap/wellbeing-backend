@@ -10,6 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
+import static com.example.meal2.constant.Constants.*;
+
 @RestController
 @RequestMapping("/api/v1")
 public class FoodTableItemController {
@@ -34,10 +38,14 @@ public class FoodTableItemController {
 
     @GetMapping(value="/food-table-items", produces={"application/json"})
     public ResponseEntity<FoodTableDTO> getAllFoodTableItems(
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal User user,
+            @RequestParam Optional<Integer> p,
+            @RequestParam Optional<Integer> s
     ){
+        Integer page = p.orElse(DEFAULT_PAGE_NUMBER);
+        Integer size = s.orElse(DEFAULT_FOOD_TABLE_ITEM_PAGE_SIZE);
         return new ResponseEntity<>(
-                foodTableItemService.getFoodTable(user),
+                foodTableItemService.getFoodTable(user, page, size),
                 HttpStatus.OK
         );
     }
