@@ -6,6 +6,7 @@ import com.example.meal2.exception.ResourceNotFoundException;
 import com.example.meal2.fooditem.FoodItemService;
 import com.example.meal2.fooditem.dto.FoodItemDTO;
 import com.example.meal2.foodtableitem.dto.FoodTableDTO;
+import com.example.meal2.foodtableitem.dto.FoodTableItemCountDTO;
 import com.example.meal2.foodtableitem.dto.FoodTableItemDTO;
 import com.example.meal2.foodtableitem.dto.FoodTableSummaryDTO;
 import com.example.meal2.mealitem.MealItem;
@@ -86,6 +87,18 @@ public class FoodTableItemServiceImpl implements FoodTableItemService {
     }
 
     @Override
+    public FoodTableItemDTO getFoodTableItem(User user, Long foodTableItemId) {
+        Optional<FoodTableItem> foodTableItem = foodTableItemRepository.findById(foodTableItemId);
+        if(foodTableItem.isPresent()){
+            if(Objects.equals(foodTableItem.get().getUserId(), user.getId())){
+                return convertFoodTableItemToFoodTableItemDTO(foodTableItem.get());
+            }
+            throw new NotResourceOwnerException("does not own this resource");
+        }
+        throw new ResourceNotFoundException("foodTableItem id not found: " + foodTableItemId);
+    }
+
+    @Override
     public void deleteFoodTableItem(User user, Long foodTableItemId) {
         Optional<FoodTableItem> foodTableItem = foodTableItemRepository.findById(foodTableItemId);
         if(foodTableItem.isPresent()){
@@ -101,6 +114,11 @@ public class FoodTableItemServiceImpl implements FoodTableItemService {
     @Override
     public void deleteFoodTableItems(User user) {
         foodTableItemRepository.deleteFoodTableItems(user.getId());
+    }
+
+    @Override
+    public FoodTableItemCountDTO getFoodTableItemCount(User user) {
+        return new FoodTableItemCountDTO(foodTableItemRepository.countUserFoodTableItems(user.getId()));
     }
 
     private FoodTableItemDTO convertFoodTableItemToFoodTableItemDTO(FoodTableItem foodTableItem){

@@ -1,5 +1,6 @@
 package com.example.meal2.fooditem;
 
+import com.example.meal2.fooditem.dto.FoodItemCountDTO;
 import com.example.meal2.fooditem.dto.FoodItemDTO;
 
 import java.util.List;
@@ -10,5 +11,7 @@ public interface FoodItemService {
     List<FoodItemDTO> getAllFoodItems(Integer page, Integer size);
 
     FoodItemDTO getFoodItem(Long foodItemId);
+
+    FoodItemCountDTO getFoodItemCount();
 
 }

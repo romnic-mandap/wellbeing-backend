@@ -2,6 +2,7 @@ package com.example.meal2.fooditem;
 
 import com.example.meal2.exception.NotResourceOwnerException;
 import com.example.meal2.exception.ResourceNotFoundException;
+import com.example.meal2.fooditem.dto.FoodItemCountDTO;
 import com.example.meal2.fooditem.dto.FoodItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +44,12 @@ public class FoodItemServiceImpl implements FoodItemService {
             return convertFoodItemToFoodItemDTO(foodItem.get());
         }
         throw new ResourceNotFoundException("foodItem Id not found: " + foodItemId);
+    }
+
+    @Override
+    public FoodItemCountDTO getFoodItemCount() {
+        Integer count = foodItemRepository.countFoodItems();
+        return new FoodItemCountDTO(count);
     }
 
 

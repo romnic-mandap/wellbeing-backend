@@ -48,7 +48,7 @@ public class FoodTableItemServiceImplTest {
     private final int OTHER_USER_ID = 9998;
     private final Long FOODTABLEITEM_ID = 10000L;
     private final Long FOODITEM_ID = 1L;
-    private final int MAX_FOODTABLEITEMS = 32;
+    private final int MAX_FOODTABLEITEMS = 36;
 
     @BeforeEach
     void setup(){
