@@ -1,6 +1,5 @@
 package com.example.meal2.aftermealnote;
 
-import com.beust.ah.A;
 import com.example.meal2.aftermealnote.dto.AfterMealNoteCreationDTO;
 import com.example.meal2.aftermealnote.dto.AfterMealNoteDetailedDTO;
 import com.example.meal2.aftermealnote.dto.AfterMealNoteUpdateDTO;
