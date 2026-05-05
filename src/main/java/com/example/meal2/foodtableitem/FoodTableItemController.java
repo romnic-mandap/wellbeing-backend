@@ -1,6 +1,9 @@
 package com.example.meal2.foodtableitem;
 
+import com.example.meal2.fooditem.dto.FoodItemCountDTO;
+import com.example.meal2.fooditem.dto.FoodItemDTO;
 import com.example.meal2.foodtableitem.dto.FoodTableDTO;
+import com.example.meal2.foodtableitem.dto.FoodTableItemCountDTO;
 import com.example.meal2.foodtableitem.dto.FoodTableItemCreationDTO;
 import com.example.meal2.foodtableitem.dto.FoodTableItemDTO;
 import com.example.meal2.user.User;
@@ -50,6 +53,17 @@ public class FoodTableItemController {
         );
     }
 
+    @GetMapping(value="/food-table-items/{id}", produces={"application/json"})
+    public ResponseEntity<FoodTableItemDTO> getFoodTableItem(
+            @AuthenticationPrincipal User user,
+            @PathVariable("id") Long id
+    ){
+        return new ResponseEntity<>(
+                foodTableItemService.getFoodTableItem(user, id),
+                HttpStatus.OK
+        );
+    }
+
     @DeleteMapping(value="/food-table-items/{id}")
     public ResponseEntity<?> deleteFoodTableItem(
             @AuthenticationPrincipal User user,
@@ -65,5 +79,15 @@ public class FoodTableItemController {
     ){
         foodTableItemService.deleteFoodTableItems(user);
         return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/food-table-items/count", produces={"application/json"})
+    public ResponseEntity<FoodTableItemCountDTO> getFoodTableItemCount(
+            @AuthenticationPrincipal User user
+    ){
+        return new ResponseEntity<>(
+                foodTableItemService.getFoodTableItemCount(user),
+                HttpStatus.OK
+        );
     }
 }

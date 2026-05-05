@@ -1,13 +1,11 @@
 package com.example.meal2.fooditem;
 
+import com.example.meal2.fooditem.dto.FoodItemCountDTO;
 import com.example.meal2.fooditem.dto.FoodItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +33,24 @@ public class FoodItemController {
         Integer size = s.orElse(DEFAULT_FOOD_ITEM_PAGE_SIZE);
         return new ResponseEntity<>(
                 foodItemService.getAllFoodItems(page, size),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping(value="/food-items/{id}", produces={"application/json"})
+    public ResponseEntity<FoodItemDTO> getFoodItem(
+            @PathVariable("id") Long id
+    ){
+        return new ResponseEntity<>(
+                foodItemService.getFoodItem(id),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping(value="/food-items/count", produces={"application/json"})
+    public ResponseEntity<FoodItemCountDTO> getFoodItemCount(){
+        return new ResponseEntity<>(
+                foodItemService.getFoodItemCount(),
                 HttpStatus.OK
         );
     }
