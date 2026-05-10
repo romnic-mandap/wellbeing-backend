@@ -2,10 +2,7 @@ package com.example.meal2.foodtableitem;
 
 import com.example.meal2.fooditem.dto.FoodItemCountDTO;
 import com.example.meal2.fooditem.dto.FoodItemDTO;
-import com.example.meal2.foodtableitem.dto.FoodTableDTO;
-import com.example.meal2.foodtableitem.dto.FoodTableItemCountDTO;
-import com.example.meal2.foodtableitem.dto.FoodTableItemCreationDTO;
-import com.example.meal2.foodtableitem.dto.FoodTableItemDTO;
+import com.example.meal2.foodtableitem.dto.*;
 import com.example.meal2.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -87,6 +84,16 @@ public class FoodTableItemController {
     ){
         return new ResponseEntity<>(
                 foodTableItemService.getFoodTableItemCount(user),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping(value="/food-table-items/stats", produces={"application/json"})
+    public ResponseEntity<FoodTableStatsDTO> getFoodTableStats(
+            @AuthenticationPrincipal User user
+    ){
+        return new ResponseEntity<>(
+                foodTableItemService.getFoodTableStats(user),
                 HttpStatus.OK
         );
     }

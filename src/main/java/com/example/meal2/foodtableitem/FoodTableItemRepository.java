@@ -3,6 +3,7 @@ package com.example.meal2.foodtableitem;
 import com.example.meal2.foodtableitem.dto.FoodTableItemDTO;
 import com.example.meal2.foodtableitem.dto.FoodTableSummaryDTO;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +27,14 @@ public interface FoodTableItemRepository extends JpaRepository<FoodTableItem, Lo
             @Param("uid") Integer userId
     );
 
+    @Query(value= """
+               SELECT fti.*
+               FROM food_table_item fti
+               WHERE
+                   (:uid = fti.user_id)
+           """, nativeQuery=true)
+    List<FoodTableItem> getAllFoodTableItems(@Param("uid") Integer userId, Pageable pageable);
+
     @Query(value=
         """
             SELECT 
@@ -43,8 +52,6 @@ public interface FoodTableItemRepository extends JpaRepository<FoodTableItem, Lo
     FoodTableSummaryDTO getFoodTableSummary(
             @Param("uid") Integer userId
     );
-
-    List<FoodTableItem> findAllByOrderByCreatedAtAsc();
 
     @Modifying
     @Transactional

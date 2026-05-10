@@ -5,16 +5,11 @@ import com.example.meal2.exception.ResourceLimitException;
 import com.example.meal2.exception.ResourceNotFoundException;
 import com.example.meal2.fooditem.FoodItemService;
 import com.example.meal2.fooditem.dto.FoodItemDTO;
-import com.example.meal2.foodtableitem.dto.FoodTableDTO;
-import com.example.meal2.foodtableitem.dto.FoodTableItemCountDTO;
-import com.example.meal2.foodtableitem.dto.FoodTableItemDTO;
-import com.example.meal2.foodtableitem.dto.FoodTableSummaryDTO;
+import com.example.meal2.foodtableitem.dto.*;
 import com.example.meal2.mealitem.MealItem;
 import com.example.meal2.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -44,7 +39,7 @@ public class FoodTableItemServiceImpl implements FoodTableItemService {
                 size,
                 Sort.by("createdAt").ascending()
         );
-        List<FoodTableItemDTO> foodTableItemDTOList = foodTableItemRepository.findAll(pageable)
+        List<FoodTableItemDTO> foodTableItemDTOList = foodTableItemRepository.getAllFoodTableItems(user.getId(), pageable)
                 .stream()
                 .map(this::convertFoodTableItemToFoodTableItemDTO)
                 .toList();
@@ -58,6 +53,32 @@ public class FoodTableItemServiceImpl implements FoodTableItemService {
                 summary.getTotalCount(),
                 foodTableItemDTOList
         );
+    }
+
+    @Override
+    public FoodTableStatsDTO getFoodTableStats(User user) {
+        FoodTableSummaryDTO summary = foodTableItemRepository.getFoodTableSummary(user.getId());
+        return new FoodTableStatsDTO(
+                summary.getTotalKcal(),
+                summary.getTotalCarbs(),
+                summary.getTotalFat(),
+                summary.getTotalProtein(),
+                summary.getTotalFiber(),
+                summary.getTotalSodium()
+        );
+    }
+
+    @Override
+    public Page<FoodTableItemDTO> getAllFoodTableItemsPage(User user, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("created_at").ascending());
+        Integer count = foodTableItemRepository.countUserFoodTableItems(user.getId());
+        return new PageImpl<>(foodTableItemRepository.getAllFoodTableItems(user.getId(), pageable)
+                .stream()
+                .map(this::convertFoodTableItemToFoodTableItemDTO)
+                .toList(), pageable, count);
     }
 
     @Override
