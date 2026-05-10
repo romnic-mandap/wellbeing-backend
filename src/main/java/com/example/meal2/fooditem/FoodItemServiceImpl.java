@@ -5,9 +5,7 @@ import com.example.meal2.exception.ResourceNotFoundException;
 import com.example.meal2.fooditem.dto.FoodItemCountDTO;
 import com.example.meal2.fooditem.dto.FoodItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +33,22 @@ public class FoodItemServiceImpl implements FoodItemService {
         return foodItemRepository.findAll(pageable).stream()
                 .map(this::convertFoodItemToFoodItemDTO)
                 .toList();
+    }
+
+    @Override
+    public Page<FoodItemDTO> getAllFoodItemsPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("foodName").ascending()
+        );
+        Integer count = foodItemRepository.countFoodItems();
+        return new PageImpl<>(
+                foodItemRepository.findAll(pageable)
+                        .stream()
+                        .map(this::convertFoodItemToFoodItemDTO)
+                        .toList(), pageable, count
+        );
     }
 
     @Override
