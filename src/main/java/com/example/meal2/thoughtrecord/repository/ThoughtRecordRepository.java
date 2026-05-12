@@ -1,6 +1,7 @@
 package com.example.meal2.thoughtrecord.repository;
 
 import com.example.meal2.aftermealnote.AfterMealNote;
+import com.example.meal2.thoughtrecord.dto.MoodScore;
 import com.example.meal2.thoughtrecord.entity.Thought;
 import com.example.meal2.thoughtrecord.entity.ThoughtRecord;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface ThoughtRecordRepository extends JpaRepository<ThoughtRecord, Long> {
@@ -58,4 +60,20 @@ public interface ThoughtRecordRepository extends JpaRepository<ThoughtRecord, Lo
             @Param("et") LocalTime endTime
     );
 
+    @Query(value= """
+            SELECT tbl.tdate day, sum(tbl.computed_score) score
+            FROM (
+                SELECT DAY(tr.tr_date) tdate, (ms.score * m.level / 100) computed_score
+                FROM thought_record_v0 tr
+                INNER JOIN mood_v0 m on tr.id = m.thought_record_id
+                INNER JOIN mood_score_v0 ms on m.mood_type = ms.mood
+                WHERE user_id = :uid AND tr.tr_date LIKE CONCAT(:dt, '%')
+            ) tbl
+            GROUP BY tbl.tdate
+            ORDER BY tbl.tdate
+            """, nativeQuery=true)
+    List<MoodScore> getMonthMoodScores(
+            @Param("uid") Integer userId,
+            @Param("dt") String date  // yyyy-mm
+    );
 }

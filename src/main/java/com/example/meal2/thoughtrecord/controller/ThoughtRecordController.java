@@ -174,4 +174,15 @@ public class ThoughtRecordController {
         thoughtRecordService.deleteThoughtRecord(user, id);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
+
+    @GetMapping(value=PATH_HEADER+"/month-mood-scores", produces={"application/json"})
+    public ResponseEntity<?> getMonthMoodScores(
+            @AuthenticationPrincipal User user,
+            @RequestParam(required=true) String d  // yyyy-mm
+    ){
+        return new ResponseEntity<>(
+                thoughtRecordService.getMonthMoodScores(user, d),
+                HttpStatus.OK
+        );
+    }
 }

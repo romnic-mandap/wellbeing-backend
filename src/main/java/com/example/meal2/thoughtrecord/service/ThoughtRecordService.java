@@ -8,7 +8,9 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface ThoughtRecordService {
     ThoughtRecordDTO createThoughtRecord(User user, ThoughtRecordCreationDTO thoughtRecordCreationDTO);
@@ -35,4 +37,6 @@ public interface ThoughtRecordService {
     );
     ThoughtRecordDTO updateThoughtRecord(User user, Long thoughtRecordId, ThoughtRecordUpdateDTO thoughtRecordDTO);
     void deleteThoughtRecord(User user, Long id);
+
+    HashMap<Integer, Double> getMonthMoodScores(User user, String date);  // yyyy-mm
 }

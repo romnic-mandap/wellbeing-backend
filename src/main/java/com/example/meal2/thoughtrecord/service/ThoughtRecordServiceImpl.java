@@ -238,5 +238,15 @@ public class ThoughtRecordServiceImpl implements ThoughtRecordService {
         );
     }
 
+    @Override
+    public HashMap<Integer, Double> getMonthMoodScores(User user, String date) {  // yyyy-mm
+        List<MoodScore> moodScore = thoughtRecordRepository.getMonthMoodScores(user.getId(), date);
+        HashMap<Integer, Double> moodScores = new HashMap<>();
+        moodScore.forEach(ms -> {
+            moodScores.put(ms.getDay(), ms.getScore());
+        });
+        return moodScores;
+    }
+
 
 }
