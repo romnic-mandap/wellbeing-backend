@@ -37,7 +37,7 @@ public class FoodTableItemServiceImpl implements FoodTableItemService {
         Pageable pageable = PageRequest.of(
                 page,
                 size,
-                Sort.by("createdAt").ascending()
+                Sort.by("created_at").ascending()
         );
         List<FoodTableItemDTO> foodTableItemDTOList = foodTableItemRepository.getAllFoodTableItems(user.getId(), pageable)
                 .stream()

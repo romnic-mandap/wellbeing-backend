@@ -53,7 +53,7 @@ public interface FoodTableItemRepository extends JpaRepository<FoodTableItem, Lo
             @Param("uid") Integer userId
     );
 
-    @Modifying
+    @Modifying(clearAutomatically=true)
     @Transactional
     @Query(value=
             """
