@@ -77,6 +77,7 @@ public class AuthenticationService {
     private AuthenticationResponseDTO generateJwt(User user){
         Map<String, Object> claims = new HashMap<>();
         claims.put("uid", user.getId());
+        claims.put("rle", user.getRole());
         var jwtToken = jwtService.generateToken(claims, user);
         return new AuthenticationResponseDTO(jwtToken);
     }
