@@ -185,4 +185,15 @@ public class ThoughtRecordController {
                 HttpStatus.OK
         );
     }
+
+    @GetMapping(value=PATH_HEADER+"/month-mood-scores-list", produces={"application/json"})
+    public ResponseEntity<?> getMonthMoodScoresList(
+            @AuthenticationPrincipal User user,
+            @RequestParam(required=true) String d  // yyyy-mm
+    ){
+        return new ResponseEntity<>(
+                thoughtRecordService.getMonthMoodScoresList(user, d),
+                HttpStatus.OK
+        );
+    }
 }

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -248,5 +249,26 @@ public class ThoughtRecordServiceImpl implements ThoughtRecordService {
         return moodScores;
     }
 
+    @Override
+    public List<Double> getMonthMoodScoresList(User user, String date) {  // yyyy-mm
+        ArrayList<Double> msList =new ArrayList<Double>();
+        Integer MOOD_SCORES_LIST_SIZE = 42; // 6 rows of 7 columns
+        Double NOT_PART_OF_MONTH = -9000.0;  // indicates not part of month
+        for(int i=0;i<MOOD_SCORES_LIST_SIZE;i++) {
+            msList.add(NOT_PART_OF_MONTH);
+        }
+        LocalDate parsedDate = LocalDate.parse(date+"-01");  // yyyy-mm + -dd
+        Integer weekdayStart = parsedDate.get(WeekFields.of(Locale.US).dayOfWeek())-1;  // 0-6 sunday-saturday
+        Integer daysInMonth = parsedDate.lengthOfMonth();
+        HashMap<Integer, Double> moodMap = getMonthMoodScores(user, date);
+        for(int i=0;i<daysInMonth;i++){
+            if(moodMap.containsKey(i+1)){
+                msList.set(weekdayStart + i, moodMap.get(i+1));
+            }else{
+                msList.set(weekdayStart + i, 0.0);
+            }
+        }
+        return msList;
+    }
 
 }

@@ -39,4 +39,5 @@ public interface ThoughtRecordService {
     void deleteThoughtRecord(User user, Long id);
 
     HashMap<Integer, Double> getMonthMoodScores(User user, String date);  // yyyy-mm
+    List<Double> getMonthMoodScoresList(User user, String date);
 }
