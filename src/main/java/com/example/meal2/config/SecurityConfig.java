@@ -59,17 +59,30 @@ public class SecurityConfig {
 
                 .requestMatchers("api/v1/food-table-items/**")
                 .authenticated()
+                .requestMatchers("api/v2/food-table-items/**")
+                .authenticated()
 
                 .requestMatchers("api/v1/food-items/**")
+                .authenticated()
+                .requestMatchers("api/v2/food-items/**")
                 .authenticated()
 
                 .requestMatchers("api/v1/meals/**")
                 .authenticated()
+                .requestMatchers("api/v2/meals/**")
+                .authenticated()
 
                 .requestMatchers("api/v1/after-meal-notes/**")
                 .authenticated()
+                .requestMatchers("api/v2/after-meal-notes/**")
+                .authenticated()
 
                 .requestMatchers("api/v1/thought-records/**")
+                .authenticated()
+                .requestMatchers("api/v2/thought-records/**")
+                .authenticated()
+
+                .requestMatchers("api/v1/to-dos/**")
                 .authenticated()
 
                 .requestMatchers("api/v1/auth/**")
