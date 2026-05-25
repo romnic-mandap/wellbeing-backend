@@ -3,6 +3,7 @@ package com.example.meal2.fooditem;
 import com.example.meal2.exception.NotResourceOwnerException;
 import com.example.meal2.exception.ResourceNotFoundException;
 import com.example.meal2.fooditem.dto.FoodItemCountDTO;
+import com.example.meal2.fooditem.dto.FoodItemCreationDTO;
 import com.example.meal2.fooditem.dto.FoodItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -21,6 +22,23 @@ public class FoodItemServiceImpl implements FoodItemService {
     @Autowired
     public FoodItemServiceImpl(FoodItemRepository foodItemRepository) {
         this.foodItemRepository = foodItemRepository;
+    }
+
+    @Override
+    public FoodItemDTO createFoodItem(FoodItemCreationDTO foodItemCreationDTO) {
+        FoodItem foodItem = new FoodItem();
+        foodItem.setFoodName(foodItemCreationDTO.foodName());
+        foodItem.setServingSize(foodItemCreationDTO.servingSize());
+        foodItem.setKcal(foodItemCreationDTO.kcal());
+        foodItem.setCarbs(foodItemCreationDTO.carbs());
+        foodItem.setFat(foodItemCreationDTO.fat());
+        foodItem.setProtein(foodItemCreationDTO.protein());
+        foodItem.setFiber(foodItemCreationDTO.fiber());
+        foodItem.setSodium(foodItemCreationDTO.sodium());
+        foodItem.setFoodType(foodItemCreationDTO.foodType());
+        foodItem.setNote(foodItemCreationDTO.note());
+        FoodItem savedFoodItem = foodItemRepository.save(foodItem);
+        return convertFoodItemToFoodItemDTO(savedFoodItem);
     }
 
     @Override

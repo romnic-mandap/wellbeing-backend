@@ -1,10 +1,13 @@
 package com.example.meal2.fooditem;
 
 import com.example.meal2.fooditem.dto.FoodItemCountDTO;
+import com.example.meal2.fooditem.dto.FoodItemCreationDTO;
 import com.example.meal2.fooditem.dto.FoodItemDTO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +37,17 @@ public class FoodItemController {
         return new ResponseEntity<>(
                 foodItemService.getAllFoodItems(page, size),
                 HttpStatus.OK
+        );
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(value="/food-items", produces={"application/json"}, consumes={"application/json"})
+    public ResponseEntity<FoodItemDTO> createFoodItem(
+            @Valid @RequestBody FoodItemCreationDTO foodItemCreationDTO
+            ){
+        return new ResponseEntity<>(
+                foodItemService.createFoodItem(foodItemCreationDTO),
+                HttpStatus.CREATED
         );
     }
 
