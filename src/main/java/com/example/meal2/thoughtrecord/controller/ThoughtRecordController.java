@@ -5,6 +5,7 @@ import com.example.meal2.aftermealnote.dto.AfterMealNoteUpdateDTO;
 import com.example.meal2.thoughtrecord.dto.ThoughtRecordCreationDTO;
 import com.example.meal2.thoughtrecord.dto.ThoughtRecordDTO;
 import com.example.meal2.thoughtrecord.dto.ThoughtRecordUpdateDTO;
+import com.example.meal2.thoughtrecord.entity.MoodType;
 import com.example.meal2.thoughtrecord.service.ThoughtRecordService;
 import com.example.meal2.user.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -193,6 +194,29 @@ public class ThoughtRecordController {
     ){
         return new ResponseEntity<>(
                 thoughtRecordService.getMonthMoodScoresList(user, d),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping(value=PATH_HEADER+"/month-moods", produces={"application/json"})
+    public ResponseEntity<?> getMonthMoods(
+            @AuthenticationPrincipal User user,
+            @RequestParam(required=true) String d  // yyyy-mm
+    ){
+        return new ResponseEntity<>(
+                thoughtRecordService.getMonthMoods(user, d),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping(value=PATH_HEADER+"/month-moods-list", produces={"application/json"})
+    public ResponseEntity<?> getMonthMoodThoughtRecords(
+            @AuthenticationPrincipal User user,
+            @RequestParam(required=true) String d,  // yyyy-mm
+            @RequestParam(required=true) String m
+    ){
+        return new ResponseEntity<>(
+                thoughtRecordService.getMonthMoodThoughtRecords(user, d, m),
                 HttpStatus.OK
         );
     }

@@ -1,7 +1,9 @@
 package com.example.meal2.thoughtrecord.repository;
 
 import com.example.meal2.aftermealnote.AfterMealNote;
+import com.example.meal2.thoughtrecord.dto.MonthMood;
 import com.example.meal2.thoughtrecord.dto.MoodScore;
+import com.example.meal2.thoughtrecord.entity.MoodType;
 import com.example.meal2.thoughtrecord.entity.Thought;
 import com.example.meal2.thoughtrecord.entity.ThoughtRecord;
 import org.springframework.data.domain.Pageable;
@@ -75,5 +77,33 @@ public interface ThoughtRecordRepository extends JpaRepository<ThoughtRecord, Lo
     List<MoodScore> getMonthMoodScores(
             @Param("uid") Integer userId,
             @Param("dt") String date  // yyyy-mm
+    );
+
+    @Query(value= """
+            SELECT DISTINCT m.mood_type mood
+            FROM thought_record_v0 tr
+            INNER JOIN mood_v0 m on tr.id = m.thought_record_id
+            INNER JOIN mood_score_v0 ms on m.mood_type = ms.mood
+            WHERE user_id = :uid AND tr.tr_date LIKE CONCAT(:dt, '%')
+            ORDER BY m.mood_type ASC
+            """, nativeQuery=true)
+    List<MonthMood> getMonthMoods(
+            @Param("uid") Integer userId,
+            @Param("dt") String date  // yyyy-mm
+    );
+
+    @Query(value= """
+            SELECT tr.*
+            FROM thought_record_v0 tr
+            INNER JOIN mood_v0 m on tr.id = m.thought_record_id
+            INNER JOIN mood_score_v0 ms on m.mood_type = ms.mood
+            WHERE user_id = :uid AND tr.tr_date LIKE CONCAT(:dt, '%') AND m.mood_type = :md
+            ORDER BY m.level DESC, tr.tr_date ASC, tr.tr_time ASC
+            """, nativeQuery=true)
+    List<ThoughtRecord> getMonthMoodThoughtRecords(
+            @Param("uid") Integer userId,
+            @Param("dt") String date,  // yyyy-mm
+            @Param("md") String mood,
+            Pageable pageable
     );
 }

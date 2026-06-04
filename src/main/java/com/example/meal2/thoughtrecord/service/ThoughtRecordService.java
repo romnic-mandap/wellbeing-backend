@@ -1,13 +1,16 @@
 package com.example.meal2.thoughtrecord.service;
 
+import com.example.meal2.thoughtrecord.dto.MonthMood;
 import com.example.meal2.thoughtrecord.dto.ThoughtRecordCreationDTO;
 import com.example.meal2.thoughtrecord.dto.ThoughtRecordDTO;
 import com.example.meal2.thoughtrecord.dto.ThoughtRecordUpdateDTO;
+import com.example.meal2.thoughtrecord.entity.MoodType;
 import com.example.meal2.user.User;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,4 +43,7 @@ public interface ThoughtRecordService {
 
     HashMap<Integer, Double> getMonthMoodScores(User user, String date);  // yyyy-mm
     List<Double> getMonthMoodScoresList(User user, String date);
+    List<String> getMonthMoods(User user, String date);
+    List<ThoughtRecordDTO> getMonthMoodThoughtRecords(User user, String date, String mood);
+
 }

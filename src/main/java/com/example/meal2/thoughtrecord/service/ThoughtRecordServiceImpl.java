@@ -271,4 +271,23 @@ public class ThoughtRecordServiceImpl implements ThoughtRecordService {
         return msList;
     }
 
+    @Override
+    public List<String> getMonthMoods(User user, String date) {  // yyyy-mm
+        List<MonthMood> mm = thoughtRecordRepository.getMonthMoods(user.getId(), date);
+        ArrayList<String> sl = new ArrayList<>();
+        for (int i=0;i<mm.size();i++){
+            sl.add(mm.get(i).getMood());
+        }
+        return sl;
+    }
+
+    @Override
+    public List<ThoughtRecordDTO> getMonthMoodThoughtRecords(User user, String date, String mood) {
+        Pageable pageable = PageRequest.of(
+                0,
+                24);
+        return thoughtRecordRepository.getMonthMoodThoughtRecords(user.getId(), date, mood, pageable).stream()
+                .map(conversionMapper::convertThoughtRecord2DTO).toList();
+    }
+
 }
