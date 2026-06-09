@@ -10,10 +10,10 @@ public record UserCreationDTO(
         @Size(min=6, max=64, message="username => must be between 6 and 64 characters")
         String username,
         @NotBlank(message="password => must not be blank")
-        @Size(min=6, max=64, message="password => must be between 6 and 128 characters")
+        @Size(min=6, max=128, message="password => must be between 6 and 128 characters")
         String password,
         @NotBlank(message="passwordConfirmation => must not be blank")
-        @Size(min=6, max=64, message="password => must be between 6 and 128 characters")
+        @Size(min=6, max=128, message="password => must be between 6 and 128 characters")
         String passwordConfirmation
 ) {
 }
