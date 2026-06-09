@@ -28,6 +28,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(GenericForbiddenException.class)
+    public ResponseEntity<Map<String, List<String>>> handleGenericForbiddenException(GenericForbiddenException ex){
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.FORBIDDEN);
+    }
+
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Map<String, List<String>>> handleAuthenticationException(AuthenticationException ex){

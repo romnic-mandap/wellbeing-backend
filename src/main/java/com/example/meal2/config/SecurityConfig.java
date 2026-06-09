@@ -85,6 +85,9 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/to-dos/**")
                 .authenticated()
 
+                .requestMatchers("api/v1/user/**")
+                .authenticated()
+
                 .requestMatchers("api/v1/auth/**")
                 .permitAll()
                 .requestMatchers(AUTH_WHITELIST)
